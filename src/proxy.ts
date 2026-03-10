@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 import { isProtectedPath, ROUTES } from "@/routes";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   if (isProtectedPath(pathname)) {
@@ -18,5 +18,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api|.*\\..*).*)"],
+  matcher: [String.raw`/((?!_next/static|_next/image|favicon.ico|api/|.*\..*).*)`],
 };

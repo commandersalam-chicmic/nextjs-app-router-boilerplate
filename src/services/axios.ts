@@ -1,5 +1,4 @@
-import { paths } from "@/routes";
-import { API_BASE_PATH } from "@/services/urls";
+import { paths, ROUTES } from "@/routes";
 import { useAuthStore } from "@/store/auth-store";
 import axiosLib, {
   type AxiosError,
@@ -9,7 +8,7 @@ import axiosLib, {
 } from "axios";
 
 export const axiosInstance: AxiosInstance = axiosLib.create({
-  baseURL: API_BASE_PATH || undefined,
+  // No baseURL: API endpoints are absolute (e.g. "/api/auth/login" or full URLs when using NEXT_PUBLIC_API_URL).
   withCredentials: true,
   timeout: 30_000,
   headers: {
@@ -52,6 +51,12 @@ const handle401 = (): void => {
     }
     if (globalThis.window !== undefined) {
       const currentPath = globalThis.window.location.pathname;
+
+      // Avoid redirect loops on guest-only routes like /login and /forget.
+      if (currentPath === ROUTES.LOGIN || currentPath === ROUTES.FORGET) {
+        return;
+      }
+
       const loginUrl = paths.login({ returnTo: currentPath });
       globalThis.window.location.href = loginUrl;
     }
