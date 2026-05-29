@@ -1,10 +1,12 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuthStore } from "@/store/auth-store";
+import { useEffect } from "react";
+
 import { paths } from "@/routes";
+import { useAuthStore } from "@/store/auth-store";
+
+import type { ReactNode } from "react";
 
 interface GuestGuardProps {
   children: ReactNode;
@@ -16,21 +18,20 @@ interface GuestGuardProps {
  */
 export function GuestGuard({ children, fallback }: Readonly<GuestGuardProps>) {
   const router = useRouter();
-  const { user, isLoading, fetchUser } = useAuthStore();
+  const { user, loading, fetchUser } = useAuthStore();
 
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
 
   useEffect(() => {
-    if (isLoading) return;
     if (user) {
-      router.replace(paths.app());
+      router.replace(paths.home);
     }
-  }, [user, isLoading, router]);
+  }, [user, router]);
 
-  if (isLoading && fallback) return <>{fallback}</>;
-  if (isLoading) return null;
+  if (loading && !user && fallback) return <>{fallback}</>;
+  if (loading && !user) return null;
   if (user) return null;
 
   return <>{children}</>;

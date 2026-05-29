@@ -1,5 +1,4 @@
-import { paths, ROUTES } from "@/routes";
-import { useAuthStore } from "@/store/auth-store";
+import "@/types/axios-augmentation";
 import axiosLib, {
   type AxiosError,
   type AxiosInstance,
@@ -7,8 +6,14 @@ import axiosLib, {
   type InternalAxiosRequestConfig,
 } from "axios";
 
+import { logger } from "@/lib/default-logger";
+import { hasEncryptedPayload, isSiteEncryptionEnabled } from "@/lib/http/site-encryption";
+import { paths, ROUTES } from "@/routes";
+import { useAuthStore } from "@/store/auth-store";
+import { DEV_TOOL_REQUEST_STATUS, useDevToolStore } from "@/store/dev-tool-store";
+import { decrypt, encrypt } from "@/utils/crypto";
+
 export const axiosInstance: AxiosInstance = axiosLib.create({
-  // No baseURL: API endpoints are absolute (e.g. "/api/auth/login" or full URLs when using NEXT_PUBLIC_API_URL).
   withCredentials: true,
   timeout: 30_000,
   headers: {
@@ -36,10 +41,11 @@ const cancelPendingRequests = (): void => {
   pendingRequests.length = 0;
 };
 
-const getRequestDuration = (
-  config: InternalAxiosRequestConfig & { metadata?: { startTime: number } },
-): number => (config?.metadata ? performance.now() - config.metadata.startTime : 0);
+const getRequestDuration = (config: InternalAxiosRequestConfig): number =>
+  config.metadata ? performance.now() - config.metadata.startTime : 0;
 
+// NOTE: This is a temporary solution to handle 401 errors.
+// We should implement a proper authentication system in the future.
 const handle401 = (): void => {
   if (isHandling401) return;
   isHandling401 = true;
@@ -49,10 +55,10 @@ const handle401 = (): void => {
     if (store.user) {
       store.clearUser();
     }
+    logger.debug("Handled 401: user cleared and pending requests aborted.");
     if (globalThis.window !== undefined) {
       const currentPath = globalThis.window.location.pathname;
 
-      // Avoid redirect loops on guest-only routes like /login and /forget.
       if (currentPath === ROUTES.LOGIN || currentPath === ROUTES.FORGET) {
         return;
       }
@@ -74,47 +80,105 @@ axiosInstance.interceptors.request.use(
     }
     config.withCredentials = true;
     config = createAbortController(config);
-    (config as InternalAxiosRequestConfig & { metadata?: { startTime: number } }).metadata = {
-      startTime: performance.now(),
-    };
+    config.metadata = { startTime: performance.now() };
+
+    if (isSiteEncryptionEnabled() && config.data && typeof config.data === "object") {
+      config.unencryptedData = config.data;
+      const encryptedStr = await encrypt(JSON.stringify(config.data));
+      config.data = { encryptedData: encryptedStr };
+      config.headers["X-Content-Encrypted"] = "true";
+    }
+
+    if (process.env.NODE_ENV === "development" && typeof window !== "undefined") {
+      const { addRequest } = useDevToolStore.getState();
+      const cleanHeaders: Record<string, string> = {};
+      Object.entries(config.headers || {}).forEach(([k, v]) => {
+        cleanHeaders[k] = String(v);
+      });
+      const requestId = addRequest({
+        url: config.url ?? "",
+        method: config.method ?? "GET",
+        headers: cleanHeaders,
+        data: config.unencryptedData ?? config.data,
+        status: DEV_TOOL_REQUEST_STATUS.Pending,
+      });
+      config.requestId = requestId;
+    }
+
     return config;
   },
   async (error: AxiosError) => {
+    logger.error("Axios request interceptor failed:", error);
     throw error instanceof Error ? error : new Error(String(error));
   },
 );
 
 axiosInstance.interceptors.response.use(
-  (response: AxiosResponse) => {
+  async (response: AxiosResponse) => {
     pendingRequests.shift();
-    const duration = getRequestDuration(
-      response.config as InternalAxiosRequestConfig & { metadata?: { startTime: number } },
-    );
-    // Basic debug logging; projects can swap in a real logger or telemetry later.
-    // eslint-disable-next-line no-console
-    console.debug(`[Axios] ✅ ${response.status} ${response.config.url} (${duration}ms)`);
+    const duration = getRequestDuration(response.config);
+
+    logger.debug(`[Axios] ✅ ${response.status} ${response.config.url} (${duration}ms)`);
+
+    if (isSiteEncryptionEnabled() && response.data && hasEncryptedPayload(response.data)) {
+      try {
+        const decryptedStr = await decrypt(response.data.encryptedData);
+        response.data = JSON.parse(decryptedStr) as unknown;
+      } catch (err) {
+        logger.warn("Failed to decrypt response payload:", err);
+      }
+    }
+
+    const requestId = response.config.requestId;
+    if (requestId !== undefined && typeof window !== "undefined") {
+      useDevToolStore.getState().updateRequest(requestId, {
+        status: DEV_TOOL_REQUEST_STATUS.Success,
+        statusCode: response.status,
+        duration,
+        data: response.data,
+      });
+    }
+
     return response;
   },
   async (error: AxiosError) => {
     if (axiosLib.isCancel(error) || error.code === "ERR_CANCELED") {
-      // eslint-disable-next-line no-console
-      console.debug("Request aborted due to another 401", { message: error.message });
+      logger.debug("Request aborted due to another 401", { message: error.message });
       return new Promise(() => {
         // avoid unhandled rejection
       });
     }
 
-    const duration = getRequestDuration(
-      (error.config ?? {}) as InternalAxiosRequestConfig & { metadata?: { startTime: number } },
-    );
-    // eslint-disable-next-line no-console
-    console.debug(
+    const duration = getRequestDuration((error.config ?? {}) as InternalAxiosRequestConfig);
+    logger.debug(
       `[Axios] ❌ ${error.response?.status ?? "NO_STATUS"} ${error.config?.url ?? ""} (${duration}ms)`,
     );
 
+    if (
+      error.response &&
+      isSiteEncryptionEnabled() &&
+      error.response.data &&
+      hasEncryptedPayload(error.response.data)
+    ) {
+      try {
+        const decryptedStr = await decrypt(error.response.data.encryptedData);
+        error.response.data = JSON.parse(decryptedStr) as unknown;
+      } catch (err) {
+        logger.warn("Failed to decrypt error response payload:", err);
+      }
+    }
+
+    const requestId = error.config?.requestId;
+    if (requestId !== undefined && typeof window !== "undefined") {
+      useDevToolStore.getState().updateRequest(requestId, {
+        status: DEV_TOOL_REQUEST_STATUS.Error,
+        statusCode: error.response?.status,
+        duration,
+      });
+    }
+
     if (!error.response) {
-      // eslint-disable-next-line no-console
-      console.error("Network error occurred", error);
+      logger.error("Network error occurred", error);
       throw error instanceof Error ? error : new Error(String(error));
     }
 

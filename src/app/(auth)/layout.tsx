@@ -1,15 +1,19 @@
-"use client";
+import { withGuestGuard } from "@/hocs/with-guest-guard";
+import { PublicLayout } from "@/layouts/public";
 
-import { GuestGuard } from "@/guards";
-import { ReactNode } from "react";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
-interface AuthLayoutProps {
+export const metadata: Metadata = {
+  title: "Sign in",
+};
+
+interface LayoutProps {
   children: ReactNode;
 }
-export default function AuthLayout({ children }: Readonly<AuthLayoutProps>) {
-  return (
-    <GuestGuard>
-      <div className="min-h-screen flex items-center justify-center bg-muted/30">{children}</div>
-    </GuestGuard>
-  );
+
+function Layout({ children }: Readonly<LayoutProps>) {
+  return <PublicLayout>{children}</PublicLayout>;
 }
+
+export default withGuestGuard(Layout);

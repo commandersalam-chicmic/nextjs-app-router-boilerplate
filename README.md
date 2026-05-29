@@ -21,7 +21,7 @@ Standalone Next.js 16 App Router boilerplate with auth, guards, ACL, services, a
 
 | Path      | Group         | Description          |
 | --------- | ------------- | -------------------- |
-| `/`       | —             | Home                 |
+| `/`       | `(common)`    | Home                 |
 | `/login`  | `(auth)`      | Sign in              |
 | `/forget` | `(auth)`      | Forgot password      |
 | `/app`    | `(dashboard)` | Main app (protected) |
@@ -39,28 +39,38 @@ Route groups do not affect the URL: `(auth)/login` → `/login`, `(dashboard)/ap
 src/
 ├── app/
 │   ├── (auth)/                 # Public auth routes
-│   │   ├── layout.tsx          # GuestGuard wrapper
+│   │   ├── layout.tsx          # export default withGuestGuard(Layout)
 │   │   ├── login/page.tsx      # /login
 │   │   └── forget/page.tsx     # /forget
-│   ├── (dashboard)/            # Protected app area
-│   │   ├── layout.tsx          # AuthGuard + AppHeader
-│   │   └── app/page.tsx        # /app
+│   ├── (common)/               # Protected route group (authenticated shell)
+│   │   ├── layout.tsx          # export default withAuthGuard(Layout)
+│   │   ├── template.tsx        # Route transition wrapper (page enter animation)
+│   │   ├── loading.tsx         # `<SplashScreen variant="segment" />` while segment pending
+│   │   └── page.tsx            # Home (/)
 │   ├── api/                    # Example API routes (can be replaced by real backend)
 │   │   ├── auth/login/route.ts
 │   │   ├── auth/logout/route.ts
 │   │   ├── health/route.ts
 │   │   └── user/me/route.ts
 │   ├── globals.css
-│   ├── layout.tsx              # Root layout (ThemeProvider, ToastProvider, etc.)
-│   └── page.tsx                # Landing page (/)
+│   └── layout.tsx              # html/body + RootLayout from layouts/root
+├── styles/
+│   └── theme/                  # Brand palette (hex) + barrel; extends Tailwind `palette-*` in tailwind.config.ts
 ├── components/                 # Atomic design (atoms → molecules → organisms)
-│   ├── atoms/                  # Button, Label, Input, Textarea, ErrorMessage
+│   ├── atoms/                  # Button, Label, FormLabel, Input, Textarea, Form*, ErrorMessage
 │   ├── molecules/              # Card, FormField, FormFieldTextarea
 │   ├── organisms/              # AppHeader, Form, LoginForm
 │   ├── providers/              # ThemeProvider (next-themes)
-│   ├── custom/                 # When, ToastProvider, RequirePermission (UI helpers)
+│   ├── custom/                 # splash-screen, when, toast, require-permission, dev-tool-overlay, language-switcher
 │   └── index.ts
-├── constants/                  # app.ts (APP_NAME, DEFAULT_PAGE_SIZE), index.ts
+├── layouts/                    # App shells (route-group layouts compose from here)
+│   ├── root/                   # RootLayout: theme, i18n, `GlobalLoadingOverlay`, toast, dev overlay
+│   ├── public/                 # PublicLayout (guest auth chrome)
+│   ├── private/                # MainLayout → DynamicLayout → VerticalLayout
+│   └── auth/                   # card/, container/ — optional auth page wrappers
+├── section/                      # Page/area sections (e.g. home/*)
+│   └── home/                     # nav, hero, footer, stack-section, … + index.ts barrel
+├── constants/                  # app.ts, assets.ts, ui.ts (routes, scroll ids, i18n codes) — no theme colors
 ├── helpers/                    # validation, format, remove-empty-keys, generate-payload-query, index.ts
 ├── lib/
 │   ├── security/               # csp.ts (CSP header), sanitize.ts (DOMPurify helpers), index.ts
@@ -79,7 +89,7 @@ src/
 ├── utils/                      # cn.ts (clsx + tailwind-merge), index.ts
 ├── routes/                     # paths.ts (ROUTES), path-builders.ts (paths.*), config.ts (guards, PROTECTED_PATHS, etc.), index.ts
 ├── guards/                     # auth-guard, guest-guard, index.ts
-├── hocs/                       # with-auth, with-guest, index.ts
+├── hocs/                       # with-auth-guard, with-guest-guard, index.ts
 ├── hooks/                      # use-acl (ROLES, PERMISSIONS, useRole, useAcl, useHasPermission)
 └── middleware.ts               # Protects routes by token cookie; redirects to login with returnTo
 ```
@@ -101,14 +111,14 @@ src/
 
 ### Paths & routing
 
-- **`@/routes`** – `ROUTES` constants, `paths.home()`, `paths.login({ returnTo })`, `paths.app()`, `buildPath()`, and route config: `PROTECTED_PATHS`, `GUEST_ONLY_PATHS`, `isProtectedPath()`, `isGuestOnlyPath()`.
+- **`@/routes`** – `ROUTES` constants, `paths.home`, `paths.login({ returnTo })`, `paths.forget()`, `buildPath()`, and route config: `PROTECTED_PATHS`, `GUEST_ONLY_PATHS`, `isProtectedPath()`, `isGuestOnlyPath()`.
 - **Middleware** – Redirects protected paths to `/login` when `token` cookie is missing; sets `returnTo` for post-login redirect.
 
 ### Guards & HOCs
 
-- **AuthGuard** – Renders children only when authenticated; otherwise redirects to login. Used in `(dashboard)/layout.tsx`.
-- **GuestGuard** – Renders children only when not authenticated; otherwise redirects to app. Used in `(auth)/layout.tsx`.
-- **withAuth(Component)**, **withGuest(Component)** – Same behavior as HOC wrappers.
+- **AuthGuard** – Renders children only when authenticated; otherwise redirects to login. Used only via **`withAuthGuard`** in `(common)/layout.tsx`.
+- **GuestGuard** – Renders children only when not authenticated; otherwise redirects home. Used only via **`withGuestGuard`** in `(auth)/layout.tsx`.
+- **withAuthGuard(Component)**, **withGuestGuard(Component)** – Layout-level HOCs that wrap the inner layout component with the corresponding guard.
 
 ### ACL (access control)
 
@@ -142,7 +152,7 @@ src/
 
 ### Forms
 
-- **Atoms:** Button, Label, Input, Textarea, ErrorMessage. **Molecules:** FormField, FormFieldTextarea, Card. **Organisms:** Form, LoginForm.
+- **Atoms:** Button, Label, FormLabel, Input, Textarea, FormControl, FormHelperText, ErrorMessage. **Molecules:** FormField, FormFieldTextarea, Card. **Organisms:** Form, LoginForm.
 - **Form** – `<Form form={form} onSubmit={onSubmit}>` with RHF; validation via Zod + `zodResolver`. LoginForm calls `login(data)` from store only; no direct store writes in the form.
 
 ### UI helpers
@@ -203,14 +213,14 @@ We’re sharing a **Next.js 16 App Router** boilerplate you can use as a startin
 
 **Features**
 
-- **Routes:** Home, Login, Forgot password, protected App area (`/app`). Route groups `(auth)` and `(dashboard)` with no duplicated URL segments.
-- **Auth:** Auth store (login, user, fetchUser) calling auth/user services; login form only calls `login(payload)`. Dummy API routes for login, logout, user/me, health.
-- **Guards & HOCs:** `AuthGuard` / `GuestGuard` for layout-level protection; `withAuth` / `withGuest` as HOC alternatives. Middleware redirects protected paths to login when token cookie is missing (with `returnTo`).
+- **Routes:** Home (`/`), Login, Forgot password. Route groups `(auth)` (guest-only) and `(common)` (auth-required); URL paths unchanged.
+- **Auth:** Auth store (`user`, `loading`, `setLoading`, `login`, `fetchUser`, …); `GlobalLoadingOverlay` in root shows `SplashScreen` while `loading` is true; segment `loading.tsx` uses `SplashScreen variant="segment"`. Dummy API routes for login, logout, user/me, health.
+- **Guards & HOCs:** `AuthGuard` / `GuestGuard` are used **only inside** `withAuthGuard` / `withGuestGuard` in `src/hocs/`; segment layouts export `withAuthGuard(Layout)` or `withGuestGuard(Layout)`. Middleware redirects protected paths to login when token cookie is missing (with `returnTo`).
 - **ACL:** Roles and permissions in config; hooks `useRole()`, `useAcl()`, **`useHasPermission(permission)`**; optional **RequirePermission** component for permission-gated UI.
 - **Services:** Single Axios client with interceptors; auth, user, health services. **Toasts only in services** for API success/error; components don’t trigger API toasts.
 - **Errors:** `getErrorMessage()` for any error shape; `handleServerError` / `handleApiError` in catch blocks with optional notify.
 - **Security:** CSP and hardening headers in next.config; DOMPurify for sanitizing user-generated HTML.
-- **Forms:** Atomic components (Button, Input, Label, Textarea, ErrorMessage, FormField, FormFieldTextarea, Form, LoginForm); Zod + RHF.
+- **Forms:** Atomic components (Button, Input, Label, FormLabel, Textarea, FormControl, FormHelperText, ErrorMessage, FormField, FormFieldTextarea, Form, LoginForm); Zod + RHF.
 - **Helpers:** `removeEmptyKeys`, `generatePayloadQuery`, validation/format helpers; centralized regex patterns.
 
 **Conventions & rules**

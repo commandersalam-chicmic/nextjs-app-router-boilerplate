@@ -1,4 +1,5 @@
 import { toast } from "@/lib/toast";
+
 import type { AxiosError } from "axios";
 
 export interface FieldError {
@@ -108,14 +109,30 @@ function handleArrayErrors(
   };
 }
 
+function isObjectWithMessageFields(
+  value: object,
+): value is object & { msg?: unknown; message?: unknown } {
+  return "msg" in value || "message" in value;
+}
+
+function readObjectMessage(rawErrors: object): string | undefined {
+  if (!isObjectWithMessageFields(rawErrors)) {
+    return undefined;
+  }
+  const msg = rawErrors.msg;
+  const message = rawErrors.message;
+  if (typeof msg === "string") return msg;
+  if (typeof message === "string") return message;
+  return undefined;
+}
+
 function handleObjectErrors(
   responseData: { message?: string },
   rawErrors: object,
 ): { message?: string; errors?: FieldError[]; isObjectError: boolean } {
-  const objectMessage = (rawErrors as any).msg ?? (rawErrors as any).message;
+  const objectMessage = readObjectMessage(rawErrors);
   const message = objectMessage ?? responseData.message;
-  const errors =
-    Object.keys(rawErrors).length > 0 ? [rawErrors as FieldError] : undefined;
+  const errors = Object.keys(rawErrors).length > 0 ? [rawErrors as FieldError] : undefined;
 
   return { message, errors, isObjectError: true };
 }

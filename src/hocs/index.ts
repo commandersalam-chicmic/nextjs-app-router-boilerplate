@@ -1,2 +1,2 @@
-export { withAuth } from "./with-auth";
-export { withGuest } from "./with-guest";
+export { withAuthGuard } from "./with-auth-guard";
+export { withGuestGuard } from "./with-guest-guard";

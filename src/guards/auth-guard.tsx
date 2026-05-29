@@ -1,10 +1,12 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { useAuthStore } from "@/store/auth-store";
+
 import { paths, ROUTES } from "@/routes";
+import { useAuthStore } from "@/store/auth-store";
+
+import type { ReactNode } from "react";
 
 interface AuthGuardProps {
   children: ReactNode;
@@ -17,21 +19,21 @@ interface AuthGuardProps {
 export function AuthGuard({ children, fallback }: Readonly<AuthGuardProps>) {
   const router = useRouter();
   const pathname = usePathname();
-  const { user, isLoading, fetchUser } = useAuthStore();
+  const { user, loading, fetchUser } = useAuthStore();
 
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
 
   useEffect(() => {
-    if (isLoading) return;
+    if (loading && !user) return;
     if (!user) {
       router.replace(paths.login({ returnTo: pathname ?? ROUTES.HOME }));
     }
-  }, [user, isLoading, router, pathname]);
+  }, [user, loading, router, pathname]);
 
-  if (isLoading && fallback) return <>{fallback}</>;
-  if (isLoading) return null;
+  if (loading && !user && fallback) return <>{fallback}</>;
+  if (loading && !user) return null;
   if (!user) return null;
 
   return <>{children}</>;

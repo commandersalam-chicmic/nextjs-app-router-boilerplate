@@ -1,9 +1,8 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { ThemeProvider, ToastProvider } from "@/components";
-import "@/app/globals.css";
+import RootLayout from "@/layouts/root";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+import "@/app/globals.css";
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: "Next.js App Router Boilerplate",
@@ -11,23 +10,15 @@ export const metadata: Metadata = {
     "Barebone Next.js 16 App Router boilerplate with Zustand, Tailwind, and best practices",
 };
 
-export default function RootLayout({
+export default function Layout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <ToastProvider />
-        </ThemeProvider>
+    <html suppressHydrationWarning lang="en">
+      <body className="font-sans antialiased">
+        <RootLayout>{children}</RootLayout>
       </body>
     </html>
   );

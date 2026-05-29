@@ -1,7 +1,9 @@
 "use client";
 
-import { cn } from "@/utils";
 import * as React from "react";
+
+import { cn } from "@/utils";
+
 import type { FieldValues, UseFormReturn } from "react-hook-form";
 
 export interface FormProps<TFieldValues extends FieldValues = FieldValues> extends Omit<
@@ -19,6 +21,7 @@ export function Form<TFieldValues extends FieldValues = FieldValues>({
   onSubmit,
   children,
   className,
+  autoComplete = "off",
   ...formProps
 }: Readonly<FormProps<TFieldValues>>): React.ReactElement {
   const handleSubmit = form.handleSubmit((data: TFieldValues) => {
@@ -26,7 +29,13 @@ export function Form<TFieldValues extends FieldValues = FieldValues>({
   });
 
   return (
-    <form className={cn("space-y-4", className)} onSubmit={handleSubmit} noValidate {...formProps}>
+    <form
+      noValidate
+      autoComplete={autoComplete}
+      className={cn("space-y-4", className)}
+      onSubmit={handleSubmit}
+      {...formProps}
+    >
       {children}
     </form>
   );

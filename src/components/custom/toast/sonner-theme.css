@@ -1,0 +1,43 @@
+/* Sonner — align with app design tokens (see globals.css :root / .dark) */
+
+[data-sonner-toaster] {
+  --width: 22rem;
+  --gap: 12px;
+  font-family: var(--font-sans);
+}
+
+[data-sonner-toast] {
+  border-radius: var(--radius);
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.06),
+    0 4px 6px -4px rgb(0 0 0 / 0.04);
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
+}
+
+.dark [data-sonner-toast] {
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.35),
+    0 4px 6px -4px rgb(0 0 0 / 0.25);
+}
+
+[data-sonner-toast][data-styled="true"] [data-close-button] {
+  border-radius: calc(var(--radius) - 4px);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+[data-sonner-toast][data-styled="true"] [data-close-button]:hover {
+  background-color: hsl(var(--muted));
+  color: hsl(var(--foreground));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-sonner-toast] {
+    transition: none;
+  }
+}

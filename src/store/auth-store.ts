@@ -1,40 +1,50 @@
-import { handleServerError } from "@/lib/errors";
-import {
-  authService,
-  userService,
-  type LoginPayload,
-  type User,
-} from "@/services";
 import { create } from "zustand";
+
+import { logger } from "@/lib/default-logger";
+import { authService, userService, type LoginPayload, type User } from "@/services";
 
 interface AuthState {
   user: User | null;
-  isLoading: boolean;
+  /** Session / auth work in progress (e.g. `fetchUser`, `login`). */
+  loading: boolean;
   error: string | null;
   fetchUser: () => Promise<void>;
   login: (payload: LoginPayload) => Promise<void>;
+  logout: () => Promise<void>;
   setUser: (user: User | null) => void;
   clearUser: () => void;
+  setLoading: (loading: boolean) => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
-  isLoading: false,
+  loading: false,
   error: null,
 
+  setLoading: (loading) => set({ loading }),
+
   fetchUser: async () => {
-    set({ isLoading: true, error: null });
+    const hadUserBefore = get().user !== null;
+    if (!hadUserBefore) {
+      set({ loading: true, error: null });
+    }
     try {
       const res = await userService.getMe();
-      set({ user: res.data, isLoading: false });
+      set((state) => ({
+        user: res.data,
+        loading: hadUserBefore ? state.loading : false,
+      }));
     } catch (err) {
-      const { message } = handleServerError(err, true, true);
-      set({ user: null, error: message ?? null, isLoading: false });
+      logger.error("Failed to fetch user", err);
+      set({
+        user: null,
+        loading: false,
+      });
     }
   },
 
   login: async (payload: LoginPayload) => {
-    set({ isLoading: true, error: null });
+    set({ loading: true, error: null });
     try {
       const res = await authService.login(payload);
       const user = res?.data?.user;
@@ -45,20 +55,29 @@ export const useAuthStore = create<AuthState>((set) => ({
             email: user.email,
             name: user.name,
           },
-          isLoading: false,
+          loading: false,
           error: null,
         });
       } else {
-        set({ isLoading: false });
+        set({ loading: false });
       }
     } catch (err) {
-      const { message } = handleServerError(err, true, true);
-      set({ user: null, error: message ?? null, isLoading: false });
-      throw err;
+      logger.error("Login failed", err);
+      set({ user: null, loading: false });
     }
   },
 
   setUser: (user) => set({ user }),
 
-  clearUser: () => set({ user: null, error: null }),
+  clearUser: () => set({ user: null, error: null, loading: false }),
+
+  logout: async () => {
+    try {
+      await authService.logout();
+    } catch {
+      // Ignore network errors
+    } finally {
+      set({ user: null, loading: false, error: null });
+    }
+  },
 }));

@@ -1,0 +1,213 @@
+{
+  "common": {
+    "language": "भाषा",
+    "english": "अंग्रेजी",
+    "hindi": "हिंदी",
+    "welcome": "नेक्स्ट.जेएस ऐप राउटर बॉयलरप्लेट",
+    "description": "नेक्स्ट 16, जुस्तैंड, टेलविंड और ऐप राउटर के साथ बेयरबोन सेटअप। कोई एमयूआई नहीं।",
+    "backToHome": "होम पर वापस जाएं",
+    "loading": "लोड हो रहा है…",
+    "unauthorized": "अनधिकृत",
+    "demoCredentials": "डेमो क्रेडेंशियल:",
+    "email": "ईमेल",
+    "password": "पासवर्ड"
+  },
+  "button": {
+    "app": "ऐप",
+    "login": "लॉगिन",
+    "signIn": "साइन इन",
+    "logout": "लॉगआउट",
+    "backToLogin": "लॉगिन पर वापस जाएं",
+    "forgotPassword": "पासवर्ड भूल गए?",
+    "backToHome": "होम पर वापस जाएं"
+  },
+  "login": {
+    "title": "वापसी पर स्वागत है",
+    "subTitle": "जारी रखने के लिए साइन इन करें।",
+    "emailLabel": "ईमेल",
+    "passwordLabel": "पासवर्ड",
+    "showPassword": "पासवर्ड दिखाएं",
+    "hidePassword": "पासवर्ड छिपाएं",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "••••••••",
+    "error": {
+      "emailRequired": "ईमेल आवश्यक है",
+      "emailInvalid": "अमान्य ईमेल",
+      "passwordRequired": "पासवर्ड आवश्यक है"
+    }
+  },
+  "auth": {
+    "brand": "बॉयलरप्लेट",
+    "backgroundImageAlt": "प्रकृतिक पृष्ठभूमि",
+    "footerLine": "@ - 2026 - डेवलपर्स के लिए डिज़ाइन"
+  },
+  "splash": {
+    "title": "एक क्षण",
+    "subtitle": "ऐप इस चरण को पूरा कर रहा है—कृपया प्रतीक्षा करें।"
+  },
+  "homepage": {
+    "nav": {
+      "stack": "स्टैक",
+      "philosophy": "दर्शन",
+      "journal": "जर्नल",
+      "signOut": "साइन आउट"
+    },
+    "brand": "बॉयलरप्लेट",
+    "featureDetail": {
+      "backToStack": "स्टैक पर वापस",
+      "keySpecs": "मुख्य विशेषताएँ",
+      "viewSpecs": "विवरण देखें",
+      "backToJournal": "जर्नल पर वापस"
+    },
+    "categories": {
+      "all": "सभी",
+      "core": "कोर",
+      "state": "स्टेट",
+      "ui": "UI",
+      "security": "सुरक्षा",
+      "testing": "टेस्टिंग",
+      "tooling": "टूलिंग"
+    },
+    "hero": {
+      "badge": "Next.js 16 बॉयलरप्लेट",
+      "titleLine1": "शांत",
+      "titleAccent": "कोडिंग।",
+      "descriptionLine1": "एक डेवलपर बॉयलरप्लेट जो आपके वर्कफ़्लो में घुल मिल जाए।",
+      "descriptionLine2": "स्वच्छ संरचना, शांत संचालन, प्रीमियम डिफ़ॉल्ट।",
+      "exploreCta": "स्टैक देखें",
+      "imageAlt": "शांत प्रकृति पृष्ठभूमि"
+    },
+    "stack": {
+      "title": "स्टैक"
+    },
+    "philosophy": {
+      "titleLine1": "गति के लिए जन्मा,",
+      "titleLine2": "मन के लिए बना।",
+      "introP1": "इस बॉयलरप्लेट का उद्देश्य सरल है: डेवलपर टेम्पलेट शोरगुल न हों। वे चिकनी पत्थर या स्पष्ट खिड़की जैसे हों—काम करते समय उपयोगी, कंपाइल करते समय अदृश्य।",
+      "introP2": "अनंत डिपेंडेंसी के युग में हम केवल आवश्यक उपकरण चुनते हैं। मानक Web API, स्वच्छ लेआउट और नेटिव कॉन्फ़िग।",
+      "studioCaption": "देव स्टूडियो, क्योटो",
+      "studioImageAlt": "कार्यस्थल स्टूडियो",
+      "block1Eyebrow": "भौतिकता",
+      "block1TitleLine1": "उपकरण जो",
+      "block1TitleLine2": "समय के साथ खरें।",
+      "block1Body": "त्याग्य पैकेज नहीं। React, Next.js और ब्राउज़र API से स्थिर, मेंटेनेबल कोड।",
+      "block1ImageAlt": "प्राकृतिक बनावट",
+      "block2Eyebrow": "मौन",
+      "block2Title": "डिफ़ॉल्ट पर मौन।",
+      "block2Body": "हल्के बंडल, कोई भारी ट्रैकिंग नहीं, कोई भारी UI फ्रेमवर्क नहीं।",
+      "block2ImageAlt": "शांत रहने की जगह"
+    },
+    "journal": {
+      "sectionEyebrow": "संपादकीय",
+      "sectionTitle": "जर्नल",
+      "j1": {
+        "title": "ज़ीरो ब्लोट का दर्शन",
+        "date": "29 मई, 2026",
+        "excerpt": "हल्के, नेटिव ब्राउज़र समाधान क्यों आवश्यक हैं।",
+        "content": "आधुनिक फ्रेमवर्क युग में सरल पेज भी MB खींचते हैं। गुणवत्ता मानक API और स्वच्छ आर्किटेक्चर से शुरू होती है।",
+        "imageAlt": "जर्नल: ज़ीरो ब्लोट"
+      },
+      "j2": {
+        "title": "आधुनिक वेब ऐप सुरक्षा",
+        "date": "15 मई, 2026",
+        "excerpt": "Web Crypto के साथ साइट-वाइड एन्क्रिप्शन।",
+        "content": "सुरक्षा ब्लोट नहीं जोड़नी चाहिए। AES-256-GCM से क्लाइंट-सर्वर संचार सुरक्षित।",
+        "imageAlt": "जर्नल: सुरक्षा"
+      },
+      "j3": {
+        "title": "सर्केडियन कोडिंग",
+        "date": "28 अप्रैल, 2026",
+        "excerpt": "शांत वर्कफ़्लो और फोकस।",
+        "content": "कॉन्टेक्स्ट स्विचिंग युग में फोकस प्रीमियम है। शांत कार्यस्थल, म्यूट पैलेट, साफ लॉग।",
+        "imageAlt": "जर्नल: सर्केडियन कोडिंग"
+      }
+    },
+    "footer": {
+      "brandTitle": "बॉयलरप्लेट",
+      "brandBody": "स्वच्छ, प्राकृतिक कोड संरचना। गति के लिए जन्मा, मन के लिए बना।",
+      "colStackTitle": "स्टैक",
+      "colStackLinks": {
+        "coreModules": "सभी कोर मॉड्यूल",
+        "stateUi": "स्टेट और UI",
+        "encryption": "AES एन्क्रिप्शन",
+        "testing": "टेस्ट किट"
+      },
+      "colCompanyTitle": "कंपनी",
+      "colCompanyLinks": {
+        "philosophy": "हमारा दर्शन",
+        "sustainability": "टिकाऊपन",
+        "journal": "जर्नल"
+      },
+      "newsletterTitle": "न्यूज़लेटर",
+      "newsletterPlaceholder": "developer@address.com",
+      "newsletterSubscribe": "सब्सक्राइब",
+      "newsletterSubscribing": "भेज रहे हैं…",
+      "newsletterSubscribed": "सदस्य बने",
+      "signatureMadePrefix": "निर्मित",
+      "signatureMadeSuffix": "CMND3R द्वारा",
+      "copyright": "© 2026 बॉयलरप्लेट। सर्वाधिकार सुरक्षित।"
+    },
+    "features": {
+      "f1": {
+        "name": "Next.js 16 ऐप राउटर",
+        "tagline": "स्वतंत्र नेविगेशन।",
+        "description": "Next.js 16, Turbopack, लेआउट और API प्रॉक्सी।",
+        "longDescription": "तेज़, स्वतंत्र नेविगेशन। ऐप राउटर कन्वेंशन, Turbopack के साथ ऑप्टिमाइज़्ड डिलीवरी।",
+        "spec0": "पैरेलल और नेस्टेड लेआउट",
+        "spec1": "API हैंडलर रैपर",
+        "spec2": "Turbopack संकलन",
+        "imageAlt": "Next.js फीचर"
+      },
+      "f2": {
+        "name": "Zustand ग्लोबल स्टोर",
+        "tagline": "प्रवाहित स्टेट, कम शोर।",
+        "description": "ऑथ, थीम और नेटवर्क लॉगिंग के लिए हल्का स्टेट।",
+        "longDescription": "जटिल बॉयलरप्लेट नहीं। ऑथ, थीम और डेव टूल्स के लिए साफ़ हुक।",
+        "spec0": "Zustand ऑथ स्टोर",
+        "spec1": "स्थायी सेटिंग्स",
+        "spec2": "स्टेट सब्सक्रिप्शन",
+        "imageAlt": "Zustand फीचर"
+      },
+      "f3": {
+        "name": "Tailwind CSS और थीम",
+        "tagline": "दृश्य मौन।",
+        "description": "लाइट/डार्क, नरम रंग, Tailwind।",
+        "longDescription": "आँखों पर कठोर प्रकाश नहीं। रेस्पॉन्सिव, मैट टोन, गर्म डार्क मोड।",
+        "spec0": "सैंडस्टोन पैलेट",
+        "spec1": "सर्केडियन लाइट/डार्क",
+        "spec2": "बाहरी UI लाइब्रेरी शून्य",
+        "imageAlt": "थीम फीचर"
+      },
+      "f4": {
+        "name": "AES-256-GCM एन्क्रिप्शन",
+        "tagline": "सुरक्षा से मौन।",
+        "description": "SubtleCrypto के साथ पेलोड रैपिंग।",
+        "longDescription": "डिफ़ॉल्ट सुरक्षा। क्लाइंट-सर्वर AES-256-GCM, बिना भारी ओवरहेड।",
+        "spec0": "AES-256-GCM Web Crypto",
+        "spec1": "पेलोड रैपर",
+        "spec2": "एनवी टॉगल",
+        "imageAlt": "एन्क्रिप्शन फीचर"
+      },
+      "f5": {
+        "name": "Vitest और Playwright",
+        "tagline": "विश्वास, शांति से।",
+        "description": "यूनिट, इंटीग्रेशन और E2E टेस्ट।",
+        "longDescription": "टूटे फीचर न धकेलें। Vitest मॉक और Playwright E2E फ्लो।",
+        "spec0": "Vitest यूनिट",
+        "spec1": "Playwright E2E ऑथ",
+        "spec2": "ज़ीरो कॉन्फ़िग चेक",
+        "imageAlt": "टेस्टिंग फीचर"
+      },
+      "f6": {
+        "name": "cURL इंटरसेप्टर DevTool",
+        "tagline": "प्राकृतिक ट्रेस।",
+        "description": "Axios लॉग और cURL जनरेशन।",
+        "longDescription": "डिबगिंग सहज। इंटरसेप्टर, हेडर फॉर्मेट, कॉपी एक्शन।",
+        "spec0": "Axios लॉग इंटरसेप्टर",
+        "spec1": "cURL जनरेटर",
+        "spec2": "मिनिमल ड्रॉर",
+        "imageAlt": "डेवटूल फीचर"
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+
 import { cn } from "@/utils";
 
 export interface ErrorMessageProps
@@ -9,9 +10,9 @@ export interface ErrorMessageProps
 const ErrorMessage = React.forwardRef<HTMLSpanElement, ErrorMessageProps>(
   ({ className, ...props }, ref) => (
     <span
+      className={cn("text-sm text-destructive", className)}
       ref={ref}
       role="alert"
-      className={cn("text-sm text-destructive", className)}
       {...props}
     />
   )

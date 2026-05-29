@@ -1,20 +1,18 @@
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
+import { wrapApiHandler } from "@/helpers";
+import mockUser from "@/mocks/mock-user.json";
 
-  if (!token) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+export const GET = wrapApiHandler(
+  async (_request: NextRequest, _body: unknown, _context: unknown) => {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("token")?.value;
 
-  const user = {
-    id: "1",
-    email: "demo@example.com",
-    name: "Demo User",
-    role: "user",
-  };
+    if (!token) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
 
-  return NextResponse.json(user);
-}
+    return NextResponse.json(mockUser);
+  },
+);

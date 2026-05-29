@@ -1,6 +1,7 @@
 import { handleServerError } from "@/lib/errors";
 import { toast } from "@/lib/toast";
 import { API_ENDPOINTS } from "@/services/urls";
+
 import { axiosInstance } from "../axios";
 
 export interface LoginPayload {
@@ -20,9 +21,8 @@ export const authService = {
       toast.success("Signed in successfully");
       return res;
     } catch (err) {
-      const { message } = handleServerError(err, true);
-      if (message) toast.error(message);
-      throw err;
+      const { errors, message } = handleServerError(err);
+      throw errors ?? message;
     }
   },
 
@@ -31,9 +31,8 @@ export const authService = {
       await axiosInstance.post(API_ENDPOINTS.AUTH_LOGOUT);
       toast.success("Signed out");
     } catch (err) {
-      const { message } = handleServerError(err, true);
-      if (message) toast.error(message);
-      throw err;
+      const { errors, message } = handleServerError(err);
+      throw errors ?? message;
     }
   },
 };

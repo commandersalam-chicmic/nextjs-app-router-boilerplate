@@ -6,9 +6,9 @@
 export const CSP_HEADER =
   "default-src 'self'; " +
   "script-src 'self'; " +
-  "style-src 'self'; " +
+  "style-src 'self' https://fonts.googleapis.com; " +
   "img-src 'self' data: blob: https:; " +
-  "font-src 'self' data:; " +
+  "font-src 'self' data: https://fonts.gstatic.com; " +
   "connect-src 'self' https:; " +
   "frame-ancestors 'self'; " +
   "base-uri 'self'; " +

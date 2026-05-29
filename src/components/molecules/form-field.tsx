@@ -1,28 +1,12 @@
 "use client";
 
-import { When } from "@/components";
-import { ErrorMessage, Input, Label } from "@/components/atoms";
-import { cn } from "@/utils";
-import type { ReactElement } from "react";
 import * as React from "react";
 import { Controller, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 
-interface FormFieldLabelProps {
-  fieldName: string;
-  labelValue: string;
-}
+import { FormControl, FormHelperText, FormLabel, Input } from "@/components/atoms";
+import { cn } from "@/utils";
 
-function FormFieldLabel({ fieldName, labelValue }: Readonly<FormFieldLabelProps>): ReactElement {
-  return <Label htmlFor={fieldName}>{labelValue}</Label>;
-}
-
-function createLabelRenderer(fieldName: string, labelValue: string): () => ReactElement {
-  return () => <FormFieldLabel fieldName={fieldName} labelValue={labelValue} />;
-}
-
-function createErrorMessageRenderer(message: string): () => ReactElement {
-  return () => <ErrorMessage>{message}</ErrorMessage>;
-}
+import type { ReactElement, ReactNode } from "react";
 
 export interface FormFieldProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -31,11 +15,19 @@ export interface FormFieldProps<
   control: Control<TFieldValues>;
   name: TName;
   label?: string;
+  /** Optional content on the same row as the label (e.g. “Forgot password?”). */
+  labelEnd?: ReactNode;
+  labelClassName?: string;
+  /** Shown when the field has no validation error (neutral helper line). */
+  helperText?: string;
+  endAdornment?: ReactNode;
   placeholder?: string;
   type?: React.HTMLInputTypeAttribute;
   disabled?: boolean;
   className?: string;
   inputClassName?: string;
+  /** Defaults to `"off"` to limit browser autofill. */
+  autoComplete?: string;
 }
 
 export function FormField<
@@ -45,34 +37,66 @@ export function FormField<
   control,
   name,
   label,
+  labelEnd,
+  labelClassName,
+  helperText,
+  endAdornment,
   placeholder,
   type = "text",
   disabled,
   className,
   inputClassName,
+  autoComplete = "off",
 }: Readonly<FormFieldProps<TFieldValues, TName>>): ReactElement {
+  const helperId = React.useId();
+
   return (
     <Controller
       control={control}
       name={name}
       render={({ field, fieldState }) => {
         const errorMessage = fieldState.error?.message;
+        const hasHelperSlot = Boolean(errorMessage) || Boolean(helperText);
+        const showLabelRow = label != null || labelEnd != null;
+
         return (
-          <div className={cn("space-y-1", className)}>
-            <When condition={label != null}>{createLabelRenderer(field.name, label ?? "")}</When>
-            <Input
-              id={field.name}
-              type={type}
-              placeholder={placeholder}
-              disabled={disabled}
-              className={inputClassName}
-              aria-invalid={Boolean(fieldState.error)}
-              {...field}
-            />
-            <When condition={errorMessage != null}>
-              {createErrorMessageRenderer(errorMessage ?? "")}
-            </When>
-          </div>
+          <FormControl className={className} invalid={Boolean(fieldState.error)}>
+            {showLabelRow ? (
+              <div className="flex items-center justify-between gap-2">
+                {label === null || label === undefined ? (
+                  <span aria-hidden className="min-w-0 flex-1" />
+                ) : (
+                  <FormLabel className={labelClassName} htmlFor={field.name}>
+                    {label}
+                  </FormLabel>
+                )}
+                {labelEnd}
+              </div>
+            ) : null}
+            <div className="relative">
+              <Input
+                aria-describedby={hasHelperSlot ? helperId : undefined}
+                aria-invalid={Boolean(fieldState.error)}
+                autoComplete={autoComplete}
+                disabled={disabled}
+                id={field.name}
+                placeholder={placeholder}
+                type={type}
+                className={cn(
+                  endAdornment && "pr-12",
+                  inputClassName,
+                  fieldState.error && "border-destructive focus-visible:ring-destructive/40",
+                )}
+                {...field}
+              />
+              {endAdornment ? (
+                <div className="absolute inset-y-0 right-3 flex items-center">{endAdornment}</div>
+              ) : null}
+            </div>
+            <FormHelperText error={Boolean(errorMessage)} id={helperId}>
+              {errorMessage ?? helperText ?? "\u00A0"}
+            </FormHelperText>
+          </FormControl>
         );
       }}
     />

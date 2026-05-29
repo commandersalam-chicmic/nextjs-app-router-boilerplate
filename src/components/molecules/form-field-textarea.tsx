@@ -1,27 +1,12 @@
 "use client";
 
-import { When } from "@/components";
-import { ErrorMessage, Label, Textarea } from "@/components/atoms";
-import { cn } from "@/utils";
-import type { ReactElement } from "react";
+import * as React from "react";
 import { Controller, type Control, type FieldPath, type FieldValues } from "react-hook-form";
 
-interface FormFieldLabelProps {
-  fieldName: string;
-  labelValue: string;
-}
+import { FormControl, FormHelperText, FormLabel, Textarea } from "@/components/atoms";
+import { cn } from "@/utils";
 
-function FormFieldLabel({ fieldName, labelValue }: Readonly<FormFieldLabelProps>): ReactElement {
-  return <Label htmlFor={fieldName}>{labelValue}</Label>;
-}
-
-function createLabelRenderer(fieldName: string, labelValue: string): () => ReactElement {
-  return () => <FormFieldLabel fieldName={fieldName} labelValue={labelValue} />;
-}
-
-function createErrorMessageRenderer(message: string): () => ReactElement {
-  return () => <ErrorMessage>{message}</ErrorMessage>;
-}
+import type { ReactElement, ReactNode } from "react";
 
 export interface FormFieldTextareaProps<
   TFieldValues extends FieldValues = FieldValues,
@@ -30,49 +15,82 @@ export interface FormFieldTextareaProps<
   control: Control<TFieldValues>;
   name: TName;
   label?: string;
+  labelEnd?: ReactNode;
+  labelClassName?: string;
+  helperText?: string;
   placeholder?: string;
   disabled?: boolean;
   rows?: number;
   className?: string;
+  textareaClassName?: string;
+  /** Defaults to `"off"` to limit browser autofill. */
+  autoComplete?: string;
 }
 
-function FormFieldTextareaInner<
+export function FormFieldTextarea<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
 >({
   control,
   name,
   label,
+  labelEnd,
+  labelClassName,
+  helperText,
   placeholder,
   disabled,
   rows = 3,
   className,
+  textareaClassName,
+  autoComplete = "off",
 }: Readonly<FormFieldTextareaProps<TFieldValues, TName>>): ReactElement {
+  const helperId = React.useId();
+
   return (
     <Controller
       control={control}
       name={name}
       render={({ field, fieldState }) => {
         const errorMessage = fieldState.error?.message;
+        const hasHelperSlot = Boolean(errorMessage) || Boolean(helperText);
+        const showLabelRow = label != null || labelEnd != null;
+
         return (
-          <div className={cn("space-y-1", className)}>
-            <When condition={label != null}>{createLabelRenderer(field.name, label ?? "")}</When>
+          <FormControl className={className} invalid={Boolean(fieldState.error)}>
+            {showLabelRow ? (
+              <div className="flex items-center justify-between gap-2">
+                {label === null || label === undefined ? (
+                  <span aria-hidden className="min-w-0 flex-1" />
+                ) : (
+                  <FormLabel className={labelClassName} htmlFor={field.name}>
+                    {label}
+                  </FormLabel>
+                )}
+                {labelEnd}
+              </div>
+            ) : null}
             <Textarea
+              aria-describedby={hasHelperSlot ? helperId : undefined}
+              aria-invalid={Boolean(fieldState.error)}
+              autoComplete={autoComplete}
+              disabled={disabled}
               id={field.name}
               placeholder={placeholder}
-              disabled={disabled}
               rows={rows}
-              aria-invalid={Boolean(fieldState.error)}
+              className={cn(
+                textareaClassName,
+                fieldState.error && "border-destructive focus-visible:ring-destructive/40",
+              )}
               {...field}
             />
-            <When condition={errorMessage != null}>
-              {createErrorMessageRenderer(errorMessage ?? "")}
-            </When>
-          </div>
+            <FormHelperText error={Boolean(errorMessage)} id={helperId}>
+              {errorMessage ?? helperText}
+            </FormHelperText>
+          </FormControl>
         );
       }}
     />
   );
 }
 
-export const FormFieldTextarea = FormFieldTextareaInner;
+FormFieldTextarea.displayName = "FormFieldTextarea";

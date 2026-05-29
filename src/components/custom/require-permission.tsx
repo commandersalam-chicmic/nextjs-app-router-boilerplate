@@ -1,6 +1,7 @@
 "use client";
 
 import { useHasPermission, type Permission } from "@/hooks/use-acl";
+
 import type { ReactElement, ReactNode } from "react";
 
 interface RequirePermissionProps {

@@ -1,0 +1,213 @@
+{
+  "common": {
+    "language": "Language",
+    "english": "English",
+    "hindi": "Hindi",
+    "welcome": "Next.js App Router Boilerplate",
+    "description": "Barebone setup with Next 16, Zustand, Tailwind, and App Router. No MUI.",
+    "backToHome": "Back to home",
+    "loading": "Loading…",
+    "unauthorized": "Unauthorized",
+    "demoCredentials": "Demo Credentials:",
+    "email": "Email",
+    "password": "Password"
+  },
+  "button": {
+    "app": "App",
+    "login": "Login",
+    "signIn": "Sign in",
+    "logout": "Logout",
+    "backToLogin": "Back to login",
+    "forgotPassword": "Forgot password?",
+    "backToHome": "Back to home"
+  },
+  "login": {
+    "title": "Welcome Back",
+    "subTitle": "Sign in to continue.",
+    "emailLabel": "Email",
+    "passwordLabel": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "emailPlaceholder": "you@example.com",
+    "passwordPlaceholder": "••••••••",
+    "error": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email",
+      "passwordRequired": "Password is required"
+    }
+  },
+  "auth": {
+    "brand": "Boilerplate",
+    "backgroundImageAlt": "Scenic nature background",
+    "footerLine": "@ 2026 - Designed for Developers"
+  },
+  "splash": {
+    "title": "Just a moment",
+    "subtitle": "Please wait while the app finishes this step."
+  },
+  "homepage": {
+    "nav": {
+      "stack": "Stack",
+      "philosophy": "Philosophy",
+      "journal": "Journal",
+      "signOut": "Sign out"
+    },
+    "brand": "Boilerplate",
+    "featureDetail": {
+      "backToStack": "Back to Stack",
+      "keySpecs": "Key Specs",
+      "viewSpecs": "View Specs",
+      "backToJournal": "Back to Journal"
+    },
+    "categories": {
+      "all": "All",
+      "core": "Core",
+      "state": "State",
+      "ui": "UI",
+      "security": "Security",
+      "testing": "Testing",
+      "tooling": "Tooling"
+    },
+    "hero": {
+      "badge": "Next.js 16 Boilerplate",
+      "titleLine1": "Quiet",
+      "titleAccent": "coding.",
+      "descriptionLine1": "A developer boilerplate designed to disappear into your workflow.",
+      "descriptionLine2": "Clean structures, quiet operations, premium defaults.",
+      "exploreCta": "Explore Stack",
+      "imageAlt": "Serene nature backdrop"
+    },
+    "stack": {
+      "title": "The Stack"
+    },
+    "philosophy": {
+      "titleLine1": "Born for speed,",
+      "titleLine2": "built for the mind.",
+      "introP1": "This boilerplate was founded on a simple premise: developer templates shouldn't feel noisy. They should feel like a smooth stone or a clear window—providing structural utility when you work, and remaining invisible when you compile.",
+      "introP2": "In an age of infinite dependency bloat, we choose only the essential tools. We use pure standard Web APIs, vanilla layouts, and native configs, establishing a serene connection between your development flow and browser execution.",
+      "studioCaption": "The Dev Studio, Kyoto",
+      "studioImageAlt": "Aesthetic workspace studio",
+      "block1Eyebrow": "Materiality",
+      "block1TitleLine1": "Tools that age",
+      "block1TitleLine2": "with grace.",
+      "block1Body": "We reject the disposable dependency packages. Every utility is crafted using standard React, Next.js, and browser-native APIs to ensure codebases that remain maintainable, stable, and highly performant over time.",
+      "block1ImageAlt": "Circadian natural texture",
+      "block2Eyebrow": "Silence",
+      "block2Title": "Silence by default.",
+      "block2Body": "Our structures respect your resources. No background telemetry trackers, no heavy third-party UI framework bloat. Just calm utility when you build, and lightweight clean bundles when you deploy.",
+      "block2ImageAlt": "Quiet natural living space"
+    },
+    "journal": {
+      "sectionEyebrow": "Editorial",
+      "sectionTitle": "The Journal",
+      "j1": {
+        "title": "The Philosophy of Zero Bloat",
+        "date": "May 29, 2026",
+        "excerpt": "Why modern codebases crave lightweight, native browser solutions instead of heavy UI frameworks.",
+        "content": "We live in an era of massive frameworks. A simple landing page pulls down megabytes of dependencies, slowing page load times and complicating maintenance. True codebase quality starts by using standard APIs and clean architecture. Reclaiming sensory simplicity in development means designing code that respects CPU and bundle limits alike.",
+        "imageAlt": "Journal cover: The Philosophy of Zero Bloat"
+      },
+      "j2": {
+        "title": "Securing Modern Web Apps",
+        "date": "May 15, 2026",
+        "excerpt": "A deep dive into site-wide symmetric payload encryption using standard Web Crypto APIs.",
+        "content": "Security shouldn't add bloat. Native browser SubtleCrypto APIs allow developers to secure all client-server communication using AES-256-GCM. By wrapping standard API route handlers dynamically, payloads are secure, performance is maintained, and external library bloat remains at absolute zero.",
+        "imageAlt": "Journal cover: Securing Modern Web Apps"
+      },
+      "j3": {
+        "title": "Circadian Coding Practices",
+        "date": "April 28, 2026",
+        "excerpt": "Notes on creating serene workspaces, zero background noise, and calm dev workflows.",
+        "content": "In an age of endless context switching, focus is the ultimate premium resource. Circadian coding is the practice of aligning development workflows with focus cycles. Quiet workspaces, muted color palettes, clean logs, and minimal dependency noise are essential to sustain long-term coding health.",
+        "imageAlt": "Journal cover: Circadian Coding Practices"
+      }
+    },
+    "footer": {
+      "brandTitle": "Boilerplate",
+      "brandBody": "Designing code structures that feel as clean and natural as the physical world. Born for speed, built for the mind.",
+      "colStackTitle": "Stack",
+      "colStackLinks": {
+        "coreModules": "All Core Modules",
+        "stateUi": "State & UI",
+        "encryption": "AES Encryption",
+        "testing": "Testing Kits"
+      },
+      "colCompanyTitle": "Company",
+      "colCompanyLinks": {
+        "philosophy": "Our Philosophy",
+        "sustainability": "Sustainability",
+        "journal": "The Journal"
+      },
+      "newsletterTitle": "Newsletter",
+      "newsletterPlaceholder": "developer@address.com",
+      "newsletterSubscribe": "Subscribe",
+      "newsletterSubscribing": "Subscribing...",
+      "newsletterSubscribed": "Subscribed",
+      "signatureMadePrefix": "Made with",
+      "signatureMadeSuffix": "by CMND3R",
+      "copyright": "© 2026 Boilerplate. All rights reserved."
+    },
+    "features": {
+      "f1": {
+        "name": "Next.js 16 App Router",
+        "tagline": "Unconfined navigation.",
+        "description": "Built on Next.js 16 with Turbopack compilation. Includes custom-crafted layouts, parallel routing, and API route proxying.",
+        "longDescription": "Experience navigation as it was meant to be - unconfined and lightning fast. This template leverages Next.js 16 App Router conventions and native folder structures. Encased in Turbopack compilation, pages render dynamically with optimized asset delivery.",
+        "spec0": "Parallel & Nested Layouts",
+        "spec1": "API Handler Wrappers",
+        "spec2": "Turbopack Compilation",
+        "imageAlt": "Next.js stack feature"
+      },
+      "f2": {
+        "name": "Zustand Global Store",
+        "tagline": "Flowing states, no noise.",
+        "description": "Reactive state management that tracks authentication, theme states, and network request logging with minimal boilerplate.",
+        "longDescription": "State shouldn't be a sequence of complex boilerplate. The Zustand store offers clean global hooks for user auth sessions, circadian theme switches, and developer tools, ensuring your code remains extremely readable.",
+        "spec0": "Zustand Auth Store",
+        "spec1": "Persistent Settings",
+        "spec2": "State Subscriptions",
+        "imageAlt": "Zustand state feature"
+      },
+      "f3": {
+        "name": "Tailwind CSS & Theme",
+        "tagline": "Visual silence.",
+        "description": "Circadian light & dark modes styled with soft sandstone and warm charcoal tones. Styled cleanly with Tailwind CSS.",
+        "longDescription": "Aesthetics shouldn't feel like looking into a lightbulb. Re-styled with a matte nano-sandstone texture and candle-like warm dark mode, the UI respects your attention and is fully responsive.",
+        "spec0": "Sandstone Palette",
+        "spec1": "Circadian Light/Dark Toggle",
+        "spec2": "Zero External UI Libraries",
+        "imageAlt": "Tailwind theme feature"
+      },
+      "f4": {
+        "name": "AES-256-GCM Encryption",
+        "tagline": "Silence by security.",
+        "description": "Site-wide cryptographic wrapping for API payloads using standard SubtleCrypto Web APIs. Protects your communication.",
+        "longDescription": "Security should be default. By implementing client-to-server payload wrapping using symmetric AES-256-GCM, your API inputs and outputs remain completely secure in transit with zero external overhead.",
+        "spec0": "AES-256-GCM Web Crypto",
+        "spec1": "Client-Server Payload Wrappers",
+        "spec2": "Env-Based Toggles",
+        "imageAlt": "Encryption security feature"
+      },
+      "f5": {
+        "name": "Vitest & Playwright Tests",
+        "tagline": "Rigorous peace of mind.",
+        "description": "Robust testing architecture containing unit, integration, and E2E browser flows to safeguard deployment stability.",
+        "longDescription": "Never push broken features. Configured with a synchronous translation mock for Vitest unit testing, and dynamic session flows for Playwright E2E browser tests, testing becomes a natural part of development.",
+        "spec0": "Vitest Unit Framework",
+        "spec1": "Playwright E2E Auth Flow",
+        "spec2": "Zero Config Verification",
+        "imageAlt": "Testing tooling feature"
+      },
+      "f6": {
+        "name": "cURL Interceptor DevTool",
+        "tagline": "Trace naturally.",
+        "description": "Interactive network logger capturing axios queries and formatting request data as clean shell-escaped cURL scripts.",
+        "longDescription": "The connection between development and debugging should be seamless. The built-in devtool intercepts outgoing queries, formats header variables, and exposes copying actions directly on the UI overlay.",
+        "spec0": "Axios Logging Interceptor",
+        "spec1": "Shell-Escaped cURL Generator",
+        "spec2": "Minimalist Drawer Overlay",
+        "imageAlt": "Developer tooling feature"
+      }
+    }
+  }
+}

@@ -20,7 +20,7 @@ export const API_VERSION = "v1";
 // When API_BASE_URL is set, talk to external `${BASE_URL}/api/v1`.
 // When it's empty (default), use internal Next.js routes under `/api`.
 export const API_BASE_PATH =
-  API_BASE_URL !== "" ? `${API_BASE_URL}/${namespaces}/${API_VERSION}` : `/${namespaces}`;
+  API_BASE_URL === "" ? `/${namespaces}` : `${API_BASE_URL}/${namespaces}/${API_VERSION}`;
 
 export const API_ENDPOINTS = {
   HEALTH: `${API_BASE_PATH}/health`,
